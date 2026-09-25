@@ -1,31 +1,33 @@
-# Memory — Phase 1 Frontend Setup & Authentication
+# Memory — Phase 2: Database & Storage Infrastructure
 
 Last updated: 2026-09-25
 
 ## What was built
-- **Frontend Config**: Configured Tailwind CSS v4 via `@tailwindcss/vite` plugin.
-- **Supabase Client**: Created `Frontend/src/lib/supabase.ts`.
-- **Authentication**: Built `Frontend/src/contexts/AuthContext.tsx` handling session persistence, Google OAuth login, and logout.
-- **Routing**: Setup `react-router-dom` in `App.tsx` with a `<ProtectedRoute>` wrapper.
-- **UI Pages**: Built `Login.tsx` and `Workspace.tsx` (sidebar, chat area) using Tailwind tokens and `lucide-react` icons matching the purple/white theme.
+
+- **Supabase CLI**: Initialized the local Supabase environment (`supabase/config.toml`).
+- **Database Schema**: Created the primary infrastructure migration (`supabase/migrations/20260925113151_init_document_infrastructure.sql`) containing the `documents`, `chats`, and `document_chunks` tables.
+- **Storage**: Created the private `documents` Supabase Storage bucket with strict constraints (20MB max file size, restricted to `application/pdf` and `text/plain`).
+- **Row Level Security**: Applied strict RLS policies to all new tables and the storage bucket to guarantee user data isolation based on `auth.uid()`.
 
 ## Decisions made
-- Handled routing within `App.tsx` rather than `main.tsx` to encapsulate the `AuthProvider` alongside `BrowserRouter`.
-- Used explicit `type` imports (`import type { User, Session }`) to comply with Vite/TypeScript's `verbatimModuleSyntax` strictness.
-- Auth errors are currently unhandled (silent failures) — this was identified in the Phase 1 review to be fixed in the future.
+
+- Included the `chats` table early to establish the strict one-to-one relationship between a chat and a document.
+- Storage file paths strictly follow the pattern `[user_id]/[document_id].[ext]` to allow the storage RLS policy to efficiently check ownership.
+- **Deferred Vector Dimensions**: Explicitly defined the embedding column as `VECTOR` without a strict dimension size (and without an HNSW index yet). This keeps the schema flexible until the exact Gemini embedding model is chosen in Phase 3.
 
 ## Problems solved
-- Encountered and fixed a TypeScript compilation error (`TS1484`) related to importing types from `@supabase/supabase-js`. 
-- Overcame standard npm `403` sandbox network restrictions during dependency installation.
+
+- Resolved a Supabase remote migration permission error (`SQLSTATE 42501`) by removing the redundant `ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY` statement, as Supabase already manages RLS natively for that internal table.
 
 ## Current state
-- The frontend UI shell is fully built and visually complete for Phase 1.
-- Supabase auth is wired up in the code.
-- **Blocked**: Waiting for the user to configure Google OAuth in Supabase and populate `Frontend/.env` with `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` before it can be run and manually verified.
+
+- Phase 2 (Database and Storage Infrastructure) is 100% complete and successfully pushed to the remote Supabase project. The backend architecture is ready to store user files and relational data securely.
 
 ## Next session starts with
-- Verify the frontend runs properly (`npm run dev`) and Google Auth successfully logs the user into the Workspace.
-- Begin Phase 2: Supabase database schema migrations for the `documents` and `document_chunks` tables, followed by the Document Upload feature.
+
+- **Phase 3: Document Upload Pipeline.** 
+- Next steps: Implement the frontend UI for document upload and the backend FastAPI upload endpoints to interact with the newly deployed Supabase infrastructure.
 
 ## Open questions
-- Are there any specific error toast notification libraries (e.g., `react-hot-toast` or `sonner`) we should use to handle the auth errors identified in the review?
+
+- Which exact Gemini embedding model will be used in Phase 3? (We will need to lock this in before generating embeddings).

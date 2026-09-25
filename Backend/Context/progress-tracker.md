@@ -16,10 +16,10 @@ Use `[x]` only for work completed and verified or explicitly confirmed. Keep inc
 - [x] Implement login page UI from reference (visual UI only).
 - [x] Connect Google OAuth through Supabase Auth.
 - [x] Implement chat workspace shell.
-- [ ] Confirm frontend and backend start reliably in separate terminals.
+- [x] Confirm frontend and backend start reliably in separate terminals.
 
 ## Phase 2: Document Management & Database Infrastructure
-- [ ] Finalize Supabase schema, vector dimensions/index, Storage bucket, and RLS policies.
+- [x] Finalize Supabase schema, vector dimensions/index, Storage bucket, and RLS policies.
 - [ ] Implement document upload page and states.
 - [ ] Implement authenticated document upload.
 - [ ] Implement document viewer page.
@@ -52,7 +52,7 @@ Use `[x]` only for work completed and verified or explicitly confirmed. Keep inc
 - [x] Which file formats in the first release (PDF only or more)? -> **PDF and TXT only**
 - [x] Can a chat query one document or multiple documents? -> **One document per chat**
 - [x] What upload size and per-user storage limits? -> **20MB max per file**
-- [ ] What exact Supabase tables, vector dimensions, indexes, and RLS policies?
+- [x] What exact Supabase tables, vector dimensions, indexes, and RLS policies? -> **documents, chats, document_chunks (vector dimension deferred), RLS enabled, Storage constrained to 20MB PDF/TXT**
 - [x] Which frontend component library, if any? -> **Tailwind CSS with Custom Components**
 - [ ] Is OCR for scanned PDFs required in the first release?
 
