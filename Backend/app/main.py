@@ -16,6 +16,11 @@ app.add_middleware(
 )
 
 
+from app.api import documents, chats
+
+app.include_router(documents.router)
+app.include_router(chats.router)
+
 @app.get("/")
 def root():
     return {"message": "Welcome to DocuMind API"}

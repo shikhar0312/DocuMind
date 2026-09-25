@@ -18,13 +18,14 @@ Use `[x]` only for work completed and verified or explicitly confirmed. Keep inc
 - [x] Implement chat workspace shell.
 - [x] Confirm frontend and backend start reliably in separate terminals.
 
-## Phase 2: Document Management & Database Infrastructure
+## Phase 2: Database & Storage Infrastructure
 - [x] Finalize Supabase schema, vector dimensions/index, Storage bucket, and RLS policies.
-- [ ] Implement document upload page and states.
-- [ ] Implement authenticated document upload.
-- [ ] Implement document viewer page.
 
-## Phase 3: RAG Processing & Embeddings
+## Phase 3: Document Upload Pipeline
+- [x] Implement document upload page and states.
+- [x] Implement authenticated document upload.
+
+## Phase 4: RAG Processing & Embeddings
 - [x] Finalize supported file formats and upload limits.
 - [x] Select embedding model/provider.
 - [x] Select answer-generation LLM/provider.
@@ -32,14 +33,15 @@ Use `[x]` only for work completed and verified or explicitly confirmed. Keep inc
 - [ ] Generate and store embeddings.
 - [ ] Implement semantic similarity search.
 
-## Phase 4: Chat & Q&A Integration
+## Phase 5: Chat & Q&A Integration
 - [ ] Define API contracts for auth, documents, chats, and Q&A.
 - [ ] Implement chats and message persistence.
 - [ ] Connect frontend to backend APIs.
+- [ ] Implement document viewer page.
 - [ ] Implement grounded answer generation with source references.
 - [ ] Implement clear no-evidence responses.
 
-## Phase 5: Polish & Quality Assurance
+## Phase 6: Polish & Quality Assurance
 - [ ] Implement settings page.
 - [ ] Verify responsive behavior and accessibility.
 - [ ] Verify users cannot access other users' documents/chats.
@@ -73,3 +75,4 @@ Use `[x]` only for work completed and verified or explicitly confirmed. Keep inc
 - Initial ASGI app-attribute error disappeared after `app/main.py` was populated and the server reloaded.
 - Frontend scaffold is present with `src`, `public`, and Vite files.
 - Phase 1 Frontend UI (Login, Workspace Shell) and Auth Context implemented and successfully built.
+- Supabase Database schema (`documents`, `chats`, `document_chunks`), Storage bucket (`documents`), and strict RLS policies have been successfully deployed. Ready for document upload implementation.

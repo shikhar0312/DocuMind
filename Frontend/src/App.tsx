@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { Login } from './pages/Login'
 import { Workspace } from './pages/Workspace'
+import { Upload } from './pages/Upload'
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth()
@@ -33,6 +34,14 @@ const App: React.FC = () => {
             element={
               <ProtectedRoute>
                 <Workspace />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/upload"
+            element={
+              <ProtectedRoute>
+                <Upload />
               </ProtectedRoute>
             }
           />
