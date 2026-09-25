@@ -2,3 +2,8 @@
 __pycache__/
 *.pyc
 .env
+
+# Agent-related files
+.agents/
+memory.md
+skills-lock.json
