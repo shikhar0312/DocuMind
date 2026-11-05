@@ -376,19 +376,25 @@ def render_api_key_modal() -> None:
     with col2:
         st.subheader("⚡ Quick Connect (This Session)")
         st.markdown("Or enter your key below to start using DocuMind right now:")
-        user_key = st.text_input(
-            "Gemini API Key",
-            type="password",
-            placeholder="AIzaSy...",
-            help="Your key is held strictly in your browser session memory and is never logged or stored.",
-        )
-        if st.button("Connect & Launch DocuMind", type="primary", use_container_width=True):
-            if user_key.strip():
-                st.session_state["user_api_key"] = user_key.strip()
-                st.success("API key accepted! Loading workspace...")
-                st.rerun()
-            else:
-                st.warning("Please enter a valid API key.")
+        with st.form("quick_connect_form", clear_on_submit=False):
+            user_key = st.text_input(
+                "Gemini API Key",
+                type="password",
+                placeholder="AIzaSy...",
+                help="Your key is held strictly in your browser session memory and is never logged or stored.",
+            )
+            submitted = st.form_submit_button(
+                "Connect & Launch DocuMind",
+                type="primary",
+                use_container_width=True,
+            )
+            if submitted:
+                if user_key.strip():
+                    st.session_state["user_api_key"] = user_key.strip()
+                    st.success("API key accepted! Loading workspace...")
+                    st.rerun()
+                else:
+                    st.warning("Please enter a valid API key.")
 
         st.caption("Get a free API key from [Google AI Studio](https://aistudio.google.com/).")
 
