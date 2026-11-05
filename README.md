@@ -2,6 +2,9 @@
 
 A portfolio-quality, modular **Retrieval-Augmented Generation (RAG)** application built with Python, LangChain, Streamlit, ChromaDB, and Google Gemini API.
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ragdocumind.streamlit.app/)
+🔗 **Live Application:** [https://ragdocumind.streamlit.app/](https://ragdocumind.streamlit.app/)
+
 DocuMind lets you upload documents (PDF, DOCX, TXT) or paste raw text notes, and ask questions through an intuitive chat interface. Answers are strictly grounded in your provided documents, with complete source citations (filename and page numbers) and built-in defense against hallucination.
 
 ![DocuMind Workspace UI](assets/documind_ui.png)
@@ -122,7 +125,7 @@ DocuMind/
 
 ### 2. Clone the Repository
 ```bash
-git clone <repo-url>
+git clone https://github.com/shikhar0312/DocuMind.git
 cd DocuMind
 ```
 
