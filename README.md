@@ -80,12 +80,11 @@ DocuMind/
 ├── app.py                      # Main Streamlit web application
 ├── config.py                   # Centralized configuration & environment loader
 ├── requirements.txt            # Project dependencies
-├── .env.example                # Environment variables template
 ├── .gitignore                  # Git exclusions (.env, .venv, chroma data)
 ├── pytest.ini                  # Pytest configuration
-├── architecture.md             # High-level architecture specification
-├── context.md                  # Project decisions and requirements
-├── progress.md                 # Implementation progress tracker
+├── assets/
+│   ├── documind_favicon.png    # Workspace favicon
+│   └── documind_ui.png         # UI interface screenshot
 ├── data/
 │   └── chroma_db/              # Persistent ChromaDB vector storage (.gitkeep)
 ├── src/
@@ -140,12 +139,10 @@ uv pip install -r requirements.txt
 ```
 
 ### 4. Configure Environment Variables
+Create a `.env` file in the root directory:
 ```bash
-# Copy example template
-cp .env.example .env
-
-# Edit .env and insert your API key:
-# GOOGLE_API_KEY="AIzaSy..."
+# Set your Google Gemini API key
+echo 'GOOGLE_API_KEY="your-api-key-here"' > .env
 ```
 
 ### 5. Launch the Application
