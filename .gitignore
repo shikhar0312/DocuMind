@@ -1,0 +1,27 @@
+.DS_Store
+__pycache__/
+*.pyc
+.env
+.env.example
+env.example
+
+# Internal project documentation & tracking
+architecture.md
+progress.md
+context.md
+
+# Virtual environment
+.venv/
+.pytest_cache/
+
+# Persistent database storage
+data/chroma_db/*
+!data/chroma_db/.gitkeep
+
+# Agent-related files
+.agents/
+memory.md
+skills-lock.json
+
+# Node modules
+node_modules/
