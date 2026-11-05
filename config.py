@@ -15,13 +15,51 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent
 
 
+def get_api_key() -> str:
+    """Resolve Gemini API key from environment, Streamlit secrets, or session state.
+
+    Checks sources in order:
+    1. Process environment variables (`GOOGLE_API_KEY` or `GEMINI_API_KEY`)
+    2. Streamlit Cloud Secrets (`st.secrets["GOOGLE_API_KEY"]`)
+    3. Streamlit active session state (`st.session_state["user_api_key"]`)
+    """
+    # 1. Environment variable
+    key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY") or ""
+    if key.strip():
+        return key.strip()
+
+    # 2. Streamlit Cloud secrets
+    try:
+        import streamlit as st
+        if hasattr(st, "secrets"):
+            if "GOOGLE_API_KEY" in st.secrets:
+                return str(st.secrets["GOOGLE_API_KEY"]).strip()
+            if "GEMINI_API_KEY" in st.secrets:
+                return str(st.secrets["GEMINI_API_KEY"]).strip()
+    except Exception:
+        pass
+
+    # 3. Streamlit UI session state
+    try:
+        import streamlit as st
+        if hasattr(st, "session_state") and "user_api_key" in st.session_state:
+            val = str(st.session_state["user_api_key"]).strip()
+            if val:
+                return val
+    except Exception:
+        pass
+
+    return ""
+
+
 class Settings:
     """Application settings and defaults."""
 
-    # API Keys
-    GOOGLE_API_KEY: str = (
-        os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY") or ""
-    ).strip()
+    # API Key (dynamically resolved property)
+    @property
+    def GOOGLE_API_KEY(self) -> str:
+        """Dynamically resolved Google Gemini API key."""
+        return get_api_key()
 
     # Gemini Models
     GEMINI_CHAT_MODEL: str = os.getenv("GEMINI_CHAT_MODEL", "gemini-2.5-flash")
@@ -48,7 +86,7 @@ class Settings:
     @classmethod
     def validate_api_key(cls) -> bool:
         """Return True if an API key is configured and non-empty."""
-        return bool(cls.GOOGLE_API_KEY)
+        return bool(get_api_key())
 
 
 settings = Settings()

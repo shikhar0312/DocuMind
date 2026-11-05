@@ -148,6 +148,13 @@ def render_sidebar(vector_store) -> None:
         if st.button("Clear knowledge base", type="secondary", use_container_width=True):
             clear_knowledge_base(vector_store)
 
+        if "user_api_key" in st.session_state:
+            with st.expander("🔑 Session API Key", expanded=False):
+                st.caption("Active session key connected.")
+                if st.button("Disconnect Key", type="secondary", use_container_width=True):
+                    del st.session_state["user_api_key"]
+                    st.rerun()
+
 
 def process_uploaded_files(uploaded_files, vector_store) -> None:
     """Load, split, and index uploaded files into the vector database."""
@@ -328,13 +335,79 @@ def render_chat_interface(vector_store) -> None:
                     )
 
 
+def render_api_key_modal() -> None:
+    """Render setup instructions and interactive session key input when API key is missing."""
+    st.markdown(
+        """
+        <div class="hero">
+            <h1>DocuMind <span>Knowledge Workspace</span></h1>
+            <p>Grounded Retrieval-Augmented Generation powered by LangChain, ChromaDB, and Google Gemini.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.warning("⚠️ **Google Gemini API Key Required**")
+
+    st.markdown(
+        """
+        DocuMind needs access to the Google Gemini API to generate semantic embeddings and synthesize grounded answers.
+        Choose either method below to connect:
+        """
+    )
+
+    col1, col2 = st.columns(2, gap="large")
+
+    with col1:
+        st.subheader("☁️ Streamlit Cloud (Permanent)")
+        st.markdown(
+            """
+            If you deployed DocuMind to **Streamlit Community Cloud**:
+            1. In the bottom-right corner, click **Manage app**.
+            2. Click the three dots **⋮** > **Settings** > **Secrets**.
+            3. Enter your Gemini API key in TOML format:
+            ```toml
+            GOOGLE_API_KEY = "AIzaSy..."
+            ```
+            4. Click **Save** — Streamlit Cloud will reload automatically!
+            """
+        )
+
+    with col2:
+        st.subheader("⚡ Quick Connect (This Session)")
+        st.markdown("Or enter your key below to start using DocuMind right now:")
+        user_key = st.text_input(
+            "Gemini API Key",
+            type="password",
+            placeholder="AIzaSy...",
+            help="Your key is held strictly in your browser session memory and is never logged or stored.",
+        )
+        if st.button("Connect & Launch DocuMind", type="primary", use_container_width=True):
+            if user_key.strip():
+                st.session_state["user_api_key"] = user_key.strip()
+                st.success("API key accepted! Loading workspace...")
+                st.rerun()
+            else:
+                st.warning("Please enter a valid API key.")
+
+        st.caption("Get a free API key from [Google AI Studio](https://aistudio.google.com/).")
+
+
 def main() -> None:
     """Main application entrypoint."""
     initialize_session_state()
+
+    from config import settings
+
+    if not settings.validate_api_key():
+        render_api_key_modal()
+        return
+
     try:
         vector_store = get_vector_store()
     except Exception as e:
         st.error(f"Failed to connect to vector database: {e}")
+        render_api_key_modal()
         return
 
     render_sidebar(vector_store)
